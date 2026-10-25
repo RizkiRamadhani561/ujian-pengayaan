@@ -1,22 +1,63 @@
 # Klinik Sehat — Sistem Informasi Klinik (CodeIgniter 4)
 
-Aplikasi administrasi klinik berbasis CodeIgniter 4, PHP, dan MySQL/MariaDB. Fitur: login/logout, dashboard, CRUD Pasien/Dokter/Poli/Berobat, relasi foreign key, pencarian, laporan, filter, cetak, ekspor CSV, migration, dan data demo.
+Aplikasi administrasi klinik dengan CodeIgniter 4, PHP, dan MySQL/MariaDB. Dibangun berdasarkan soal Unit Kompetensi J.620100.005.01 (Mengimplementasikan User Interface).
+
+## Fitur
+- Login/logout, session, password hashing, CSRF dan filter autentikasi.
+- Dashboard: jumlah pasien, dokter, poli, transaksi, kunjungan bulan ini, biaya bulan ini, serta transaksi terbaru.
+- CRUD Pasien, Dokter, Poli, dan Berobat; ID otomatis, pencarian, detail, edit, hapus, validasi, dropdown untuk relasi, dan konfirmasi hapus.
+- Foreign key database menjaga konsistensi relasi antartabel.
+- Laporan pasien, dokter per poli, poli, transaksi berobat, dan rekap biaya administrasi.
+- Filter rentang tanggal, poli, dokter, pasien, kata kunci; cetak melalui browser dan ekspor CSV untuk Excel.
+- UI responsif untuk desktop dan ponsel, sidebar, tabel, form, dan flash feedback.
+- Migration + seeder, beserta skema SQL manual di `database/klinik_sehat.sql`.
+
+## Persyaratan
+- PHP 8.1 atau lebih baru dengan `intl`, `mbstring`, `mysqli`, `json`, dan `openssl` aktif.
+- Composer 2, MySQL/MariaDB, dan Laragon atau XAMPP.
 
 ## Instalasi Windows (Laragon/XAMPP)
-1. Clone: `git clone https://github.com/RizkiRamadhani561/ujian-pengayaan.git`
-2. Masuk folder repo lalu jalankan `composer install`.
-3. Buat database `klinik_sehat` (utf8mb4) di phpMyAdmin.
-4. Salin `.env.example` menjadi `.env` dan sesuaikan kredensial MySQL.
-5. Jalankan `php spark migrate`, lalu `php spark db:seed ClinicSeeder`.
-6. Jalankan `php spark serve`, kemudian buka http://localhost:8080.
+1. Clone repository lalu masuk ke folder proyek:
+   ```bash
+   git clone https://github.com/RizkiRamadhani561/ujian-pengayaan.git
+   cd ujian-pengayaan
+   ```
+2. Pasang dependensi:
+   ```bash
+   composer install
+   ```
+3. Buat database bernama `klinik_sehat` dengan collation `utf8mb4_unicode_ci` di phpMyAdmin.
+4. Salin `.env.example` menjadi `.env`, lalu sesuaikan host, nama database, user, dan password.
+5. Jalankan migration dan data demo:
+   ```bash
+   php spark migrate
+   php spark db:seed ClinicSeeder
+   ```
+6. Jalankan server:
+   ```bash
+   php spark serve
+   ```
+7. Buka `http://localhost:8080`.
 
-Akun demo: `admin@klinik.test` / `Klinik123!`. Gunakan hanya untuk latihan; ganti password sebelum pemakaian nyata.
+Alternatif: import `database/klinik_sehat.sql` ke database kosong, lalu jalankan hanya `php spark db:seed ClinicSeeder` untuk mengisi contoh data dan akun demo. Pilih satu metode pembuatan struktur database; jangan menjalankan SQL manual lalu migration pada database sama karena migration akan mencoba membuat tabel yang sudah ada.
 
-## Modul
-- Dashboard dengan total pasien, dokter, poli, transaksi, kunjungan bulanan dan biaya bulan berjalan.
-- CRUD Pasien, Dokter, Poli, Berobat; kode otomatis PS.001, DK001, POL001, TRX-0001.
-- Search, form validation, dropdown relasi, detail, konfirmasi hapus, dan perlindungan FK.
-- Laporan data pasien, dokter per poli, data poli, transaksi, dan rekap biaya; filter tanggal/poli/dokter/pasien, cetak browser dan ekspor CSV untuk Excel.
-- CSRF, session login, password hashing, UI responsif.
+## Akun demo
+- Email: `admin@klinik.test`
+- Password: `Klinik123!`
 
-Butuh PHP 8.1+ dengan intl, mbstring, mysqli, json, openssl dan Composer 2.0.14+. Folder vendor sengaja tidak di-commit. Data seeder bersifat dummy. Jangan gunakan data pasien nyata pada demo. Untuk produksi, lengkapi audit log, role management, backup, HTTPS, dan kontrol akses tambahan.
+Seeder menyimpan password sebagai hash. Akun ini hanya untuk latihan; ganti password sebelum dipakai pada lingkungan lain. Data contoh pasien bersifat dummy, bukan data medis nyata.
+
+## Struktur database
+- `pasien`: `pasien_id`, `nama_pasien`, `tanggal_lahir`, `jenis_kelamin`, `alamat`.
+- `poli`: `poli_id`, `nama_poli`.
+- `dokter`: `dokter_id`, `nama_dokter`, `poli_id` (FK ke `poli`).
+- `berobat`: `no_transaksi`, `pasien_id`, `tanggal_berobat`, `dokter_id`, `keluhan`, `biaya_adm` (FK ke `pasien` dan `dokter`).
+- `users`: akun untuk login.
+
+## Pengujian
+Jalankan pemeriksaan sintaks lokal:
+```bash
+php tests/syntax-check.php
+```
+
+Runtime CI4 dan koneksi database perlu diuji setelah Composer serta ekstensi PHP yang dibutuhkan terpasang. Jangan memasukkan data pasien nyata ke demo. Untuk produksi, tambahkan role-based access control lebih rinci, audit log, backup, HTTPS, serta kebijakan retensi dan persetujuan yang sesuai.
