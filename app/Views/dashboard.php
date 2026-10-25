@@ -1,1 +1,112 @@
-<?= $this->extend('layout') ?><?= $this->section('content') ?><div class="page-heading"><div><p class="eyebrow">RINGKASAN OPERASIONAL</p><h1>Dashboard</h1><p class="muted">Selamat datang, <?= esc(session()->get('user')['name']??'Admin') ?>.</p></div><a class="btn btn-primary" href="<?= site_url('data/berobat/baru') ?>">＋ Pendaftaran Berobat</a></div><div class="stats-grid"><?php foreach([['pasien','Total Pasien','♙','blue'],['dokter','Total Dokter','✚','green'],['poli','Total Poli','▦','violet'],['berobat','Transaksi Berobat','▤','orange']] as [$k,$label,$icon,$color]): ?><article class="stat-card"><div class="stat-icon <?= esc($color) ?>"><?= esc($icon) ?></div><div class="stat-label"><?= esc($label) ?></div><div class="stat-value"><?= number_format($stats[$k]) ?></div><div class="stat-foot">Data tersimpan</div></article><?php endforeach ?></div><div class="dashboard-secondary"><article class="panel"><div class="panel-heading"><div><h2>Transaksi Terbaru</h2><p>Daftar kunjungan terakhir</p></div><a class="text-link" href="<?= site_url('data/berobat') ?>">Lihat semua →</a></div><div class="table-wrap"><table class="data-table"><thead><tr><th>No. Transaksi</th><th>Pasien</th><th>Dokter</th><th>Tanggal</th><th>Biaya</th><th></th></tr></thead><tbody><?php if(empty($recent)): ?><tr><td colspan="6" class="empty-state">Belum ada transaksi.</td></tr><?php else: foreach($recent as $r): ?><tr><td><span class="mono"><?= esc($r['no_transaksi']) ?></span></td><td><?= esc($r['nama_pasien']) ?></td><td><?= esc($r['nama_dokter']) ?></td><td><?= esc($r['tanggal_berobat']) ?></td><td class="currency"><?= esc('Rp '.number_format((float)$r['biaya_adm'],0,',','.')) ?></td><td><a class="table-action" href="<?= site_url('data/berobat/'.$r['no_transaksi']) ?>">Detail</a></td></tr><?php endforeach; endif ?></tbody></table></div></article><aside class="panel quick-panel"><div class="panel-heading"><div><h2>Akses Cepat</h2><p>Tindakan yang sering digunakan</p></div></div><a class="quick-action" href="<?= site_url('data/pasien/baru') ?>">＋ <span><strong>Tambah Pasien</strong><small>Daftarkan identitas baru</small></span> →</a><a class="quick-action" href="<?= site_url('data/dokter/baru') ?>">✚ <span><strong>Tambah Dokter</strong><small>Kelola tenaga medis</small></span> →</a><a class="quick-action" href="<?= site_url('reports/berobat') ?>">▤ <span><strong>Buka Laporan</strong><small>Filter dan ekspor</small></span> →</a><div class="monthly-summary"><span>Kunjungan bulan ini</span><strong><?= number_format($stats['bulan']) ?> kunjungan</strong><small>Total biaya administrasi</small><b><?= esc('Rp '.number_format($stats['biaya'],0,',','.')) ?></b></div></aside></div><?= $this->endSection() ?>
+<?= $this->extend('layout') ?>
+<?= $this->section('content') ?>
+<div class="page-heading">
+<div>
+<p class="eyebrow">RINGKASAN OPERASIONAL</p>
+<h1>Dashboard</h1>
+<p class="muted">Selamat datang, <?= esc(session()->get('user')['name']??'Admin') ?>.</p>
+</div>
+<a class="btn btn-primary" href="<?= site_url('data/berobat/baru') ?>">＋ Pendaftaran Berobat</a>
+</div>
+<div class="stats-grid">
+<?php foreach([['pasien','Total Pasien','♙','blue'],['dokter','Total Dokter','✚','green'],['poli','Total Poli','▦','violet'],['berobat','Transaksi Berobat','▤','orange']] as [$k,$label,$icon,$color]): ?>
+<article class="stat-card">
+<div class="stat-icon <?= esc($color) ?>">
+<?= esc($icon) ?>
+</div>
+<div class="stat-label">
+<?= esc($label) ?>
+</div>
+<div class="stat-value">
+<?= number_format($stats[$k]) ?>
+</div>
+<div class="stat-foot">Data tersimpan</div>
+</article>
+<?php endforeach ?>
+</div>
+<div class="dashboard-secondary">
+<article class="panel">
+<div class="panel-heading">
+<div>
+<h2>Transaksi Terbaru</h2>
+<p>Daftar kunjungan terakhir</p>
+</div>
+<a class="text-link" href="<?= site_url('data/berobat') ?>">Lihat semua →</a>
+</div>
+<div class="table-wrap">
+<table class="data-table">
+<thead>
+<tr>
+<th>No. Transaksi</th>
+<th>Pasien</th>
+<th>Dokter</th>
+<th>Tanggal</th>
+<th>Biaya</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody>
+<?php if(empty($recent)): ?>
+<tr>
+<td colspan="6" class="empty-state">Belum ada transaksi.</td>
+</tr>
+<?php else: foreach($recent as $r): ?>
+<tr>
+<td>
+<span class="mono">
+<?= esc($r['no_transaksi']) ?>
+</span>
+</td>
+<td>
+<?= esc($r['nama_pasien']) ?>
+</td>
+<td>
+<?= esc($r['nama_dokter']) ?>
+</td>
+<td>
+<?= esc($r['tanggal_berobat']) ?>
+</td>
+<td class="currency">
+<?= esc('Rp '.number_format((float)$r['biaya_adm'],0,',','.')) ?>
+</td>
+<td>
+<a class="table-action" href="<?= site_url('data/berobat/'.$r['no_transaksi']) ?>">Detail</a>
+</td>
+</tr>
+<?php endforeach; endif ?>
+</tbody>
+</table>
+</div>
+</article>
+<aside class="panel quick-panel">
+<div class="panel-heading">
+<div>
+<h2>Akses Cepat</h2>
+<p>Tindakan yang sering digunakan</p>
+</div>
+</div>
+<a class="quick-action" href="<?= site_url('data/pasien/baru') ?>">＋ <span>
+<strong>Tambah Pasien</strong>
+<small>Daftarkan identitas baru</small>
+</span> →</a>
+<a class="quick-action" href="<?= site_url('data/dokter/baru') ?>">✚ <span>
+<strong>Tambah Dokter</strong>
+<small>Kelola tenaga medis</small>
+</span> →</a>
+<a class="quick-action" href="<?= site_url('reports/berobat') ?>">▤ <span>
+<strong>Buka Laporan</strong>
+<small>Filter dan ekspor</small>
+</span> →</a>
+<div class="monthly-summary">
+<span>Kunjungan bulan ini</span>
+<strong>
+<?= number_format($stats['bulan']) ?> kunjungan</strong>
+<small>Total biaya administrasi</small>
+<b>
+<?= esc('Rp '.number_format($stats['biaya'],0,',','.')) ?>
+</b>
+</div>
+</aside>
+</div>
+<?= $this->endSection() ?>
