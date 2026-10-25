@@ -1,0 +1,8 @@
+#!/usr/bin/env php
+<?php
+use CodeIgniter\Boot;
+use Config\Paths;
+require __DIR__ . '/app/Config/Paths.php';
+$paths = new Paths();
+require $paths->systemDirectory . '/Boot.php';
+exit(Boot::bootSpark($paths));
