@@ -6,5 +6,5 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 abstract class BaseController extends Controller {
  protected $helpers=['url','form'];
- public function initController(RequestInterface $request,ResponseInterface $response,LoggerInterface $logger) { parent::initController($request,$response,$logger); }
+public function initController(RequestInterface $request,ResponseInterface $response,LoggerInterface $logger) { parent::initController($request,$response,$logger); }
 }
