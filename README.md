@@ -47,6 +47,18 @@ Alternatif: import `database/klinik_sehat.sql` ke database kosong, lalu jalankan
 
 Seeder menyimpan password sebagai hash. Akun ini hanya untuk latihan; ganti password sebelum dipakai pada lingkungan lain. Data contoh pasien bersifat dummy, bukan data medis nyata.
 
+## Struktur migration
+
+Setiap tabel memiliki migration terpisah agar urutan pembuatan skema jelas, mudah ditinjau, dan mudah diubah tanpa mencampur seluruh tabel dalam satu file:
+
+1. `2026-10-25-000001_CreateUsersTable.php` — akun login.
+2. `2026-10-25-000002_CreatePoliTable.php` — data poli.
+3. `2026-10-25-000003_CreatePasienTable.php` — data pasien.
+4. `2026-10-25-000004_CreateDokterTable.php` — data dokter dan relasi ke poli.
+5. `2026-10-25-000005_CreateBerobatTable.php` — transaksi berobat dan relasi ke pasien serta dokter.
+
+Code PHP, view, CSS, dan JavaScript juga telah dirapikan dengan pemisahan baris dan indentasi agar lebih mudah dibaca dan dipelajari.
+
 ## Struktur database
 - `pasien`: `pasien_id`, `nama_pasien`, `tanggal_lahir`, `jenis_kelamin`, `alamat`.
 - `poli`: `poli_id`, `nama_poli`.
